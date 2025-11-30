@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Pembelajaran Bahasa Arab</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: linear-gradient(45deg, #87ceeb, #98fb98, #dda0dd);
+            animation: bgShift 10s infinite alternate;
+        }
+        @keyframes bgShift {
+            0% { background: linear-gradient(45deg, #87ceeb, #98fb98, #dda0dd); }
+            100% { background: linear-gradient(45deg, #ffa07a, #20b2aa, #ff69b4); }
+        }
+		
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.8s ease-in-out;
+        }
+        .slide.hidden { transform: translateX(-100%); opacity: 0; }
+        .slide.active { transform: translateX(0); opacity: 1; }
+
+        /* Slide 1: Cover dengan animasi menarik */
+        #slide1 {
+            background: rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        .animated-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        .letter {
+            position: absolute;
+            font-size: 60px;
+            color: #228b22;
+            opacity: 0.8;
+            animation: float 6s infinite ease-in-out, colorChange 4s infinite;
+        }
+        .child {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background: url('https://via.placeholder.com/120x120/ff69b4/ffffff?text=Child') no-repeat center center/cover;
+            border-radius: 50%;
+            animation: walk 8s infinite linear, bounce 2s infinite;
+        }
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, #ff4500, #ffd700);
+            border-radius: 50%;
+            animation: particleFloat 5s infinite ease-in-out;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(10deg); }
+        }
+        @keyframes colorChange {
+            0% { color: #228b22; }
+            50% { color: #ff6347; }
+            100% { color: #228b22; }
+        }
+        @keyframes walk {
+            0% { left: -10%; }
+            100% { left: 110%; }
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes particleFloat {
+            0%, 100% { transform: translateY(0px) scale(1); opacity: 0.5; }
+            50% { transform: translateY(-50px) scale(1.2); opacity: 1; }
+        }
+        #slide1 .content {
+            z-index: 2;
+            text-align: center;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        #slide1 h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            animation: fadeIn 2s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+        button:hover { transform: scale(1.1); }
+
+        /* Slide 2: Flash Cards */
+        #slide2 {
+		background-image: url('https://via.placeholder.com/120x120/ff69b4/ffffff?text=Child');
+		background-size: cover;       /* agar gambar penuh di area */
+		background-repeat: no-repeat; /* gambar tidak diulang */
+		background-position: center;  /* posisi gambar di tengah */
+		flex-direction: column;
+		position: relative;
+		}
+        .cards-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .flash-card {
+            width: 200px;
+            height: 250px;
+            perspective: 1000px;
+            margin: 20px;
+            transition: transform 0.3s;
+        }
+        .flash-card:hover { transform: scale(1.05); }
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+        .flash-card.flipped .card-inner { transform: rotateY(180deg); }
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .card-front {
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .card-front img { width: 150px; height: 150px; border-radius: 10px; }
+        .card-back {
+            background: #f0e68c;
+            transform: rotateY(180deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #333;
+        }
+        .nav-buttons {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+        .nav-buttons button { margin: 0 20px; }
+        .slide2-bottom-buttons {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .slide2-bottom-buttons button:first-child { margin-left: 20px; }
+        .slide2-bottom-buttons button:last-child { margin-right: 20px; }
+
+        /* Slide 3: Latihan */
+        #slide3 {
+		background-image: url('https://via.placeholder.com/120x120/ff69b4/ffffff?text=Child');
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-position: center;
+		flex-direction: column;
+		}
+        .exercise {
+            text-align: center;
+            position: relative;
+        }
+        .exercise img { width: 200px; height: 200px; margin: 20px; border-radius: 15px; }
+        input {
+            padding: 10px;
+            font-size: 18px;
+            width: 200px;
+            margin: 10px;
+            border-radius: 10px;
+            border: 2px solid #ccc;
+        }
+        #feedback { margin-top: 20px; font-size: 20px; font-weight: bold; }
+        .nav-exercise {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+        .nav-exercise button { margin: 0 20px; }
+        .slide3-bottom-buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Slide 1: Cover -->
+    <div id="slide1" class="slide active">
+	
+        <div class="animated-bg">
+            <!-- Animasi huruf hijaiyah -->
+            <div class="letter" style="left: 10%; top: 20%; animation-delay: 0s;">ا</div>
+            <div class="letter" style="left: 20%; top: 40%; animation-delay: 1s;">ب</div>
+            <div class="letter" style="left: 30%; top: 60%; animation-delay: 2s;">ت</div>
+            <div class="letter" style="left: 70%; top: 30%; animation-delay: 3s;">ث</div>
+            <div class="letter" style="left: 80%; top: 50%; animation-delay: 4s;">ج</div>
+            <div class="letter" style="left: 50%; top: 70%; animation-delay: 5s;">ح</div>
+            <!-- Animasi anak-anak -->
+            <div class="child" style="top: 75%; animation-delay: 0s;"></div>
+            <div class="child" style="top: 80%; animation-delay: 2s;"></div>
+            <!-- Partikel -->
+            <div class="particle" style="left: 15%; top: 50%; animation-delay: 0s;"></div>
+            <div class="particle" style="left: 85%; top: 60%; animation-delay: 1s;"></div>
+            <div class="particle" style="left: 60%; top: 40%; animation-delay: 2s;"></div>
+        </div>
+        <div class="content">
+            <h1>KITARA</h1>
+            <p>Kitabah Arab untuk Pemula</p>
+            <button onclick="showSlide(2)">Mulai</button>
+        </div>
+    </div>
+
+    <!-- Slide 2: Flash Cards -->
+    <div id="slide2" class="slide hidden">
+		<div class="animated-bg">
+            <!-- Animasi huruf hijaiyah -->
+            <div class="letter" style="left: 10%; top: 20%; animation-delay: 0s;">خ</div>
+            <div class="letter" style="left: 20%; top: 40%; animation-delay: 1s;">د</div>
+            <div class="letter" style="left: 30%; top: 70%; animation-delay: 2s;">ذ</div>
+            <div class="letter" style="left: 70%; top: 15%; animation-delay: 3s;">ر</div>
+            <div class="letter" style="left: 85%; top: 60%; animation-delay: 4s;">ز</div>
+            <div class="letter" style="left: 50%; top: 70%; animation-delay: 5s;">س</div>
+            <!-- Animasi anak-anak -->
+            <div class="child" style="top: 75%; animation-delay: 0s;"></div>
+            <div class="child" style="top: 80%; animation-delay: 2s;"></div>
+            <!-- Partikel -->
+            <div class="particle" style="left: 15%; top: 50%; animation-delay: 0s;"></div>
+            <div class="particle" style="left: 85%; top: 60%; animation-delay: 1s;"></div>
+            <div class="particle" style="left: 60%; top: 40%; animation-delay: 2s;"></div>
+        </div>
+        <div class="nav-buttons">
+            <button onclick="prevCards()">&lt;</button>
+            <button onclick="nextCards()">&gt;</button>
+        </div>
+        <div class="cards-container" id="cards-container">
+            <!-- Kartu akan di-generate oleh JavaScript -->
+        </div>
+        <div class="slide2-bottom-buttons">
+            <button onclick="showSlide(1)">Kembali</button>
+            <button onclick="showSlide(3)">Main</button>
+        </div>
+    </div>
+
+    <!-- Slide 3: Latihan Menulis -->
+    <div id="slide3" class="slide hidden">
+		<div class="animated-bg">
+            <!-- Animasi huruf hijaiyah -->
+            <div class="letter" style="left: 10%; top: 20%; animation-delay: 0s;">ص</div>
+            <div class="letter" style="left: 20%; top: 40%; animation-delay: 1s;">ض</div>
+            <div class="letter" style="left: 30%; top: 60%; animation-delay: 2s;">ط</div>
+            <div class="letter" style="left: 70%; top: 30%; animation-delay: 3s;">ظ</div>
+            <div class="letter" style="left: 80%; top: 50%; animation-delay: 4s;">ع</div>
+            <div class="letter" style="left: 50%; top: 80%; animation-delay: 5s;">غ</div>
+			<div class="letter" style="left: 20%; top: 75%; animation-delay: 5s;">ف</div>
+            <!-- Animasi anak-anak -->
+            <div class="child" style="top: 75%; animation-delay: 0s;"></div>
+            <div class="child" style="top: 80%; animation-delay: 2s;"></div>
+            <!-- Partikel -->
+            <div class="particle" style="left: 15%; top: 50%; animation-delay: 0s;"></div>
+            <div class="particle" style="left: 85%; top: 60%; animation-delay: 1s;"></div>
+            <div class="particle" style="left: 60%; top: 40%; animation-delay: 2s;"></div>
+        </div>
+        <div class="exercise">
+            <div class="nav-exercise">
+                <button onclick="prevAnimal()">&lt;</button>
+                <button onclick="nextAnimal()">&gt;</button>
+            </div>
+            <img id="exercise-img" src="https://via.placeholder.com/200x200/ffa500/ffffff?text=Cat" alt="Kucing">
+            <p id="exercise-text">Kucing</p>
+            <input type="text" id="answer" placeholder="Tulis nama dalam bahasa Arab">
+            <button onclick="checkAnswer()">Periksa</button>
+            <div id="feedback"></div>
+            <div class="slide3-bottom-buttons">
+                <button onclick="showSlide(2)">Kembali</button>
+                <button onclick="showSlide(1)">Keluar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        let currentCardIndex = 0;
+        const cardsPerPage = 4;
+        const animals = [
+            { indo: 'Kucing', arab: 'قطة', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShbcwQzQpXxqSwX7vGwOOYSR01KZYUCc32FQ&s' },
+            { indo: 'Anjing', arab: 'كلب', img: 'https://png.pngtree.com/png-vector/20250111/ourmid/pngtree-golden-retriever-dog-pictures-png-image_15147078.png' },
+            { indo: 'Sapi', arab: 'بقرة', img: 'data:image/png;base64,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' },
+            { indo: 'Singa', arab: 'أسد', img: 'https://png.pngtree.com/png-clipart/20250416/original/pngtree-cute-lion-cartoon-character-design-vector-png-image_20751867.png' },
+            { indo: 'Gajah', arab: 'فيل', img: 'https://png.pngtree.com/png-vector/20240912/ourmid/pngtree-elephant-cartoon-character-standing-png-image_13822279.png' },
+            { indo: 'Harimau', arab: 'نمر', img: 'https://img.pikbest.com/origin/10/03/33/25epIkbEsTw3z.png!sw800' },
+			{ indo: 'Semut', arab: 'نملة', img: 'https://i.pinimg.com/474x/75/04/eb/7504eb46ae2ae295de4c2a74b279eba1.jpg' },
+            { indo: 'Kuda', arab: 'حصان', img: 'https://png.pngtree.com/png-clipart/20250106/original/pngtree-cute-horse-cartoon-image-png-image_20099671.png' },
+            { indo: 'Ayam', arab: 'دجاجة', img: 'https://png.pngtree.com/png-vector/20230728/ourmid/pngtree-chick-clipart-cute-yellow-chicken-drawing-png-image_6809253.png' }
+        ];
+        let currentAnimal = 0;
+
+        function showSlide(slideNum) {
+  document.querySelectorAll('.slide').forEach((slide, idx) => {
+    if (idx === slideNum - 1) {
+      slide.classList.add('active');
+      slide.classList.remove('hidden');
+    } else {
+      slide.classList.remove('active');
+      slide.classList.add('hidden');
+    }
+  });
+  currentSlide = slideNum;
+  if (slideNum === 2) {
+    renderCards();
+  } else if (slideNum === 3) {
+    loadExercise();
+  }
+}
+
+        function renderCards() {
+            const container = document.getElementById('cards-container');
+            container.innerHTML = '';
+            const start = currentCardIndex * cardsPerPage;
+            const end = start + cardsPerPage;
+            const currentAnimals = animals.slice(start, end);
+            currentAnimals.forEach(animal => {
+                const card = document.createElement('div');
+                card.className = 'flash-card';
+                card.onclick = () => flipCard(card);
+                card.innerHTML = `
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <img src="${animal.img}" alt="${animal.indo}">
+                            <p>${animal.indo}</p>
+                        </div>
+                        <div class="card-back">
+                            <p>${animal.arab}</p>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function prevCards() {
+            if (currentCardIndex > 0) {
+                currentCardIndex--;
+                renderCards();
+            }
+        }
+
+        function nextCards() {
+            if ((currentCardIndex + 1) * cardsPerPage < animals.length) {
+                currentCardIndex++;
+                renderCards();
+            }
+        }
+
+        function flipCard(card) {
+            card.classList.toggle('flipped');
+        }
+
+        function loadExercise() {
+            const animal = animals[currentAnimal];
+            document.getElementById('exercise-img').src = animal.img;
+            document.getElementById('exercise-text').innerText = animal.indo;
+            document.getElementById('answer').value = '';
+            document.getElementById('feedback').innerText = '';
+        }
+
+        function checkAnswer() {
+            const userAnswer = document.getElementById('answer').value.trim();
+            const correctAnswer = animals[currentAnimal].arab;
+            if (userAnswer === correctAnswer) {
+                document.getElementById('feedback').innerText = 'Selamat! Jawaban benar.';
+            } else {
+                document.getElementById('feedback').innerText = `Salah. Jawaban yang benar: ${correctAnswer}`;
+            }
+        }
+
+        function prevAnimal() {
+            if (currentAnimal > 0) {
+                currentAnimal--;
+                loadExercise();
+            }
+        }
+
+        function nextAnimal() {
+            if (currentAnimal < animals.length - 1) {
+                currentAnimal++;
+                loadExercise();
+            }
+        }
+		
+		
+		
+    </script>
+</body>
+</html>
